@@ -4,4 +4,5 @@
 Lifecycle, Room等等组件。现在的App功能有登录，注册，Post列表，新建Post的页面
 
 登录页面
-![](images/login.png =100x200)
+
+<img src="images/login.png" width="100" height="200"/>
