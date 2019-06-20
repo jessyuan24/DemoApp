@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <ImageView
+            android:id="@+id/top_background"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintHeight_percent=".3"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:background="@android:color/holo_green_light"/>
+
+    <ImageView
+            android:id="@+id/bottom_background"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintHeight_percent=".7"
+            app:layout_constraintTop_toBottomOf="@id/top_background"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:src="@drawable/light_green_gradient"/>
+
+    <com.coldwizards.coollibrary.CircleImageView
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:src="@drawable/avatar_1_raster"
+            app:layout_constraintTop_toTopOf="@id/top_background"
+            app:layout_constraintRight_toRightOf="@id/top_background"
+            app:layout_constraintLeft_toLeftOf="@id/top_background"
+            app:layout_constraintBottom_toBottomOf="@id/top_background"/>
+
+    <ImageView
+            android:id="@+id/user_icon"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:src="@drawable/ic_login_user"
+            android:layout_marginTop="50dp"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintTop_toTopOf="@id/bottom_background"
+            app:layout_constraintEnd_toStartOf="@id/user_name_et"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+    <EditText
+            android:id="@+id/user_name_et"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:maxLength="25"
+            android:padding="@dimen/margin_small"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/font_subtitle1"
+            android:textCursorDrawable="@drawable/white_cursor"
+            android:background="@drawable/white_bottom_border"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            android:hint="输入用户名"
+            android:layout_marginLeft="@dimen/margin_medium"
+            app:layout_constraintTop_toTopOf="@id/user_icon"
+            app:layout_constraintBottom_toBottomOf="@id/user_icon"
+            app:layout_constraintStart_toEndOf="@id/user_icon"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+    <ImageView
+            android:id="@+id/password_icon"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:src="@drawable/ic_login_password"
+            android:layout_marginTop="@dimen/margin_large"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintTop_toBottomOf="@id/user_icon"
+            app:layout_constraintEnd_toStartOf="@id/password_et"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+    <EditText
+            android:id="@+id/password_et"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/margin_small"
+            android:inputType="textPassword"
+            android:maxLength="25"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/font_subtitle1"
+            android:textCursorDrawable="@drawable/white_cursor"
+            android:background="@drawable/white_bottom_border"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            android:text="123"
+            android:hint="输入密码"
+            android:layout_marginLeft="@dimen/margin_medium"
+            app:layout_constraintTop_toTopOf="@id/password_icon"
+            app:layout_constraintBottom_toBottomOf="@id/password_icon"
+            app:layout_constraintStart_toEndOf="@id/password_icon"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+    <Button
+            android:id="@+id/login_btn"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_large"
+            app:layout_constraintTop_toBottomOf="@id/password_icon"
+            app:layout_constraintStart_toStartOf="@id/password_icon"
+            app:layout_constraintEnd_toEndOf="@id/password_et"
+            android:text="登录"
+            android:textSize="@dimen/font_subtitle1"
+            android:textColor="@android:color/holo_green_dark"
+            android:background="@drawable/selector_round_corner_button"/>
+
+    <Button
+            android:id="@+id/register_btn"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_medium"
+            app:layout_constraintTop_toBottomOf="@id/login_btn"
+            app:layout_constraintStart_toStartOf="@id/password_icon"
+            app:layout_constraintEnd_toEndOf="@id/password_et"
+            android:text="注册"
+            android:textSize="@dimen/font_subtitle1"
+            android:textColor="@android:color/holo_green_dark"
+            android:background="@drawable/selector_round_corner_button"/>
+</androidx.constraintlayout.widget.ConstraintLayout>
