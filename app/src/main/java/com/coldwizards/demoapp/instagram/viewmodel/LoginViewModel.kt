@@ -27,7 +27,8 @@ class LoginViewModel(app: Application) : AndroidViewModel(app) {
         lifecycle: LifecycleOwner, username: String, password: String,
         callback: (Int, User?) -> Unit
     ) {
-        mUserDao.findUserByUsername(username).observe(lifecycle, Observer {
+        val liveData = mUserDao.findUserByUsername(username)
+        liveData.observe(lifecycle, Observer {
             if (it.isNotEmpty()) {
                 val user = it[0]
                 if (user.password != password) {
@@ -51,6 +52,8 @@ class LoginViewModel(app: Application) : AndroidViewModel(app) {
             } else {
                 callback(2, null)
             }
+
+            liveData.removeObservers(lifecycle)
         })
     }
 
