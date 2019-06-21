@@ -106,11 +106,7 @@ class PostAdapter : PagedListAdapter<Post, PostAdapter.PostViewHolder>(diffCallb
                 "<b>${post.author.username}</b>&nbsp; ${post.content}"
             )
             mUser?.let {user ->
-                post.likeUsers.forEach {
-                    if (it.username == user.username) {
-                        likeIcon.isChecked = true
-                    }
-                }
+                if (post?.likeUsers?.contains(user.username)) likeIcon.isChecked = true else likeIcon.isChecked = false
             }
 
             if (post.pictures?.isEmpty()!!) {
@@ -143,20 +139,13 @@ class PostAdapter : PagedListAdapter<Post, PostAdapter.PostViewHolder>(diffCallb
                 if (isChecked) {
                     post?.likeCount = post?.likeCount?.plus(1)!!
                     mUser?.let {
-                        post?.likeUsers?.add(it)
+                        post?.likeUsers?.add(it.username)
                     }
                 } else {
                     post?.likeCount = post?.likeCount?.minus(1)!!
-                    var index = -1
-                    post?.likeUsers?.forEachIndexed { i, user ->
-                        if (user.username == mUser?.username) {
-                            index = i
-                        }
+                    mUser?.let {
+                        post?.likeUsers?.remove(it.username)
                     }
-                    if (index >= 0) {
-                        post?.likeUsers?.removeAt(index)
-                    }
-
                 }
 
                 likeCount.text = "${post?.likeCount}次赞"

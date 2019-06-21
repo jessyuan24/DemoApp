@@ -1,5 +1,6 @@
 package com.coldwizards.demoapp
 
+import com.google.gson.Gson
 import org.junit.Test
 
 import org.junit.Assert.*
@@ -25,6 +26,12 @@ class ExampleUnitTest {
     fun split_test() {
         val str = "asdfasdf"
         println(str.split(",")[0])
+    }
+
+    @Test
+    fun set_json_test() {
+        val sets = hashSetOf("asdf", "11111")
+        val json = Gson().toJson(sets)
     }
 }
 

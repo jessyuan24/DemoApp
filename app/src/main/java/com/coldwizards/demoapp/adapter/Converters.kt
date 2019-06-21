@@ -6,6 +6,7 @@ import com.coldwizards.demoapp.model.User
 import com.google.gson.Gson
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.collections.HashSet
 
 
 /**
@@ -87,6 +88,19 @@ class Converters {
         @JvmStatic
         fun dateToTimestamp(date: Date?): Long? {
             return (if (date == null) 0 else date!!.getTime()).toLong()
+        }
+
+        @TypeConverter
+        @JvmStatic
+        fun fromSetString(sets: HashSet<String>): String {
+            return Gson().toJson(sets)
+        }
+
+        @TypeConverter
+        @JvmStatic
+        fun stringToSet(string: String): HashSet<String> {
+            var sets = hashSetOf<String>()
+            return Gson().fromJson(string, sets.javaClass)
         }
 
     }
