@@ -5,17 +5,13 @@ Lifecycle, Room等等组件。现在的App功能有登录，注册，Post列表�
 
 
 登录页面
-
-<img src="images/login.png" width="200" height="350"/>
+<img style="float: right;" src="images/login.png" width="200" height="350"/>
 
 注册页面
-
-<img src="images/register.png" width="200" height="350"/>
+<img style="float: right;" src="images/register.png" width="200" height="350"/>
 
 Post列表页面
-
-<img src="images/post_list.png" width="200" height="350"/>
+<img style="float: right;" src="images/post_list.png" width="200" height="350"/>
 
 新建Post页面
-
-<img src="images/new_post.png" width="200" height="350"/>
+<img style="float: right;" src="images/new_post.png" width="200" height="350"/>
