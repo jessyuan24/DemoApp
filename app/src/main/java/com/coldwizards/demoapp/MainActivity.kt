@@ -5,10 +5,10 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.coldwizards.coollibrary.view.GalleryActivity
 import com.coldwizards.demoapp.instagram.view.InsActivity
 import com.coldwizards.demoapp.customview.TouchDemoActivity
 import com.coldwizards.demoapp.ndk.NdkJniUtils
-import com.coldwizards.demoapp.utils.Logs
 
 class MainActivity : AppCompatActivity() {
 
@@ -48,5 +48,9 @@ class MainActivity : AppCompatActivity() {
 
     fun booklibrary(view: View) {
         startActivity(Intent(this, InsActivity::class.java))
+    }
+
+    fun albums(view: View) {
+        startActivity(Intent(this, GalleryActivity::class.java))
     }
 }

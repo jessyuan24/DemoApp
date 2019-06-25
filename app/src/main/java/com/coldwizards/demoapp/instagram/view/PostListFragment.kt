@@ -12,7 +12,6 @@ import android.os.Handler
 import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.*
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
@@ -23,10 +22,10 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.coldwizards.coollibrary.view.GalleryActivity
 import com.coldwizards.demoapp.R
 import com.coldwizards.demoapp.instagram.PostAdapter
 import com.coldwizards.demoapp.instagram.viewmodel.PostListViewModel
-import com.coldwizards.demoapp.model.Comment
 import com.coldwizards.demoapp.model.User
 import com.coldwizards.demoapp.utils.FileUtils
 import kotlinx.android.synthetic.main.fragment_post_list.*
@@ -92,11 +91,17 @@ class PostListFragment : BaseFragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == REQUEST_CAPTURE_IMAGE && resultCode == Activity.RESULT_OK) {
-            val uri = Uri.fromFile(mImageFile)
+            val images = arrayListOf<String>(mImageFile.absolutePath)
             val bundle = Bundle()
-            bundle.putString("data", uri.toString())
+            bundle.putStringArrayList("data", images)
             view!!.findNavController().navigate(R.id.action_postListFragment_to_newPostFragment, bundle)
         } else if (requestCode == REQUEST_PICK_IMAGE && resultCode == Activity.RESULT_OK) {
+            val images = data?.getStringArrayListExtra(GalleryActivity.SELECTED_IMAGE)
+            images?.let {
+                val bundle = Bundle()
+                bundle.putStringArrayList("data", it)
+                view!!.findNavController().navigate(R.id.action_postListFragment_to_newPostFragment, bundle)
+            }
         }
     }
 
@@ -183,6 +188,8 @@ class PostListFragment : BaseFragment() {
                     adapter.submitList(it)
                     adapter.notifyDataSetChanged()
                     refresh_layout.isRefreshing = false
+
+                    showCenterToast("已刷新")
                 }, 1000)
             })
         }
@@ -220,11 +227,10 @@ class PostListFragment : BaseFragment() {
                     when (which) {
                         0 -> takePhoto()
                         1 -> {
-                            val galleryIntent = Intent(
-                                Intent.ACTION_PICK,
-                                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-                            )
-                            startActivityForResult(galleryIntent, REQUEST_PICK_IMAGE)
+                            val intent = Intent(context!!, GalleryActivity::class.java)
+                            intent.putExtra(GalleryActivity.MAX_NUM, 9)
+                            intent.putExtra(GalleryActivity.SELECTABLE, true)
+                            startActivityForResult(intent, REQUEST_PICK_IMAGE)
                         }
                     }
                 }

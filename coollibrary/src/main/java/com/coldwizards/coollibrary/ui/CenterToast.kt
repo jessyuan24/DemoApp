@@ -1,4 +1,4 @@
-package com.coldwizards.coollibrary
+package com.coldwizards.coollibrary.ui
 
 import android.content.Context
 import android.view.Gravity
@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
+import com.coldwizards.coollibrary.R
 
 class CenterToast(context: Context) {
 

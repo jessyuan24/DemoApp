@@ -24,7 +24,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:src="@drawable/light_green_gradient"/>
 
-    <com.coldwizards.coollibrary.CircleImageView
+    <com.coldwizards.coollibrary.ui.CircleImageView
             android:layout_width="120dp"
             android:layout_height="120dp"
             android:src="@drawable/avatar_1_raster"

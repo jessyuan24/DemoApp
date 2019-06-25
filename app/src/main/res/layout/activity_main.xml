@@ -26,4 +26,10 @@
             android:onClick="booklibrary"
             android:text="Instagram Demo"/>
 
+    <Button android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/MyButton"
+    android:onClick="albums"
+    android:text="Albums"/>
+
 </LinearLayout>

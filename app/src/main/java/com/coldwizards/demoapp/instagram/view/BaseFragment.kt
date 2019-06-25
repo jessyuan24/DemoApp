@@ -9,10 +9,8 @@ import android.view.ViewTreeObserver
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.core.content.ContextCompat.getSystemService
-import com.coldwizards.coollibrary.CenterToast
+import com.coldwizards.coollibrary.ui.CenterToast
 import com.coldwizards.coollibrary.LoadingDialog
-import kotlinx.android.synthetic.main.fragment_post_list.*
 
 
 /**

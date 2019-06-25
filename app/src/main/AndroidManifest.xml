@@ -36,8 +36,11 @@
         </activity>
 
         <activity
-                android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-                android:name="com.coldwizards.coollibrary.GalleryActivity">
+                android:name="com.coldwizards.coollibrary.view.GalleryActivity">
+        </activity>
+
+        <activity
+                android:name=".instagram.view.PhotoViewerActivity">
         </activity>
 
         <provider android:authorities="${applicationId}.provider"

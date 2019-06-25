@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.AdaptiveIconDrawable
 import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.widget.ImageView
@@ -48,5 +49,9 @@ inline fun <reified T : Any> newIntent(context: Context): Intent =
 
 fun ImageView.loadImage(context: Context, url: String)
         = Glide.with(context).load(url).placeholder(R.drawable.image_holder).fitCenter().into(this)
+
+fun ImageView.loadImage(context: Context, uri: Uri)
+        = Glide.with(context).load(uri).placeholder(R.drawable.image_holder).fitCenter().into(this)
+
 
 fun ImageView.loadImage(context: Context, drawable: Drawable) = Glide.with(context).load(drawable).into(this)

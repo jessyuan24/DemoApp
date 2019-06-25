@@ -1,4 +1,4 @@
-package com.coldwizards.coollibrary;
+package com.coldwizards.coollibrary.ui;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -11,6 +11,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import androidx.annotation.IdRes;
 import androidx.appcompat.widget.AppCompatImageView;
+import com.coldwizards.coollibrary.R;
 
 /**
  * Created by JessYuan on 30/11/2016.

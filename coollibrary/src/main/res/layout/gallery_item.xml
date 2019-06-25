@@ -2,12 +2,36 @@
 <androidx.constraintlayout.widget.ConstraintLayout
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:android="http://schemas.android.com/apk/res/android"
-                                                   android:layout_width="match_parent"
-                                                   android:layout_height="match_parent">
-    <com.coldwizards.coollibrary.SquareImageView
-            android:id="@+id/image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    <com.coldwizards.coollibrary.ui.SquareFrameLayout
             android:layout_width="match_parent"
-            android:layout_height="100dp"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent"/>
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+        <com.coldwizards.coollibrary.ui.SquareImageView
+                android:id="@+id/image"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scaleType="centerCrop"/>
+
+        <ImageView
+                android:id="@+id/selected_mask"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="invisible"
+                android:src="@drawable/image_selected_mask"/>
+
+        <ImageView
+                android:id="@+id/selected_iv"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_margin="@dimen/margin_tiny"
+                android:layout_gravity="top|right"
+                android:visibility="invisible"
+                android:src="@drawable/ic_check_box_outline_blank_black_24dp"/>
+    </com.coldwizards.coollibrary.ui.SquareFrameLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
