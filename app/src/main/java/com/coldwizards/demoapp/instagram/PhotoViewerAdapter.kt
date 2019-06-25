@@ -4,7 +4,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import androidx.viewpager.widget.PagerAdapter
-import com.coldwizards.demoapp.instagram.view.PhotoViewerFragment
 
 /**
  * Created by jess on 19-6-25.
