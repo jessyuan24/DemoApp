@@ -265,6 +265,8 @@ class PostListFragment : BaseFragment() {
                 val post = adapter?.currentList?.get(mCurrentPosition)!!
                 mViewModel.newComment(post, text)
                 adapter?.notifyDataSetChanged()
+
+                addCommentET.setText("")
             }
         }
     }

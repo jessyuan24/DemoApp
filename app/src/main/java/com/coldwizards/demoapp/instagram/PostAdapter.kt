@@ -98,6 +98,7 @@ class PostAdapter(val fragmentManager: FragmentManager) :
         val likeCount = itemView.findViewById<TextView>(R.id.likeCount)
         val indicator = itemView.findViewById<CircleIndicator>(R.id.indicator)
         val viewpager = itemView.findViewById<ViewPager>(R.id.pictures)
+        val pictureCount = itemView.findViewById<TextView>(R.id.picture_count)
         val addComment = itemView.findViewById<TextView>(R.id.addComment)
         val postTime = itemView.findViewById<TextView>(R.id.postTime)
         val content = itemView.findViewById<TextView>(R.id.content)
@@ -122,6 +123,8 @@ class PostAdapter(val fragmentManager: FragmentManager) :
             indicator.setViewPager(viewpager)
             indicator.visibility = if (post?.pictures?.size == 1) View.INVISIBLE else View.VISIBLE
 
+            pictureCount.text = "1/${post?.pictures?.size}"
+            pictureCount.visibility = if (post?.pictures?.size == 1) View.INVISIBLE else View.VISIBLE
 
             mUser?.let { user ->
                 if (post?.likeUsers?.contains(user.username)) likeIcon.isChecked = true else likeIcon.isChecked = false
@@ -205,6 +208,19 @@ class PostAdapter(val fragmentManager: FragmentManager) :
             )
             viewpager.id = (System.currentTimeMillis() / (position + 1)).toInt()
             viewpager.adapter = adapter
+
+            viewpager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener{
+                override fun onPageScrollStateChanged(state: Int) {
+                }
+
+                override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+                }
+
+                override fun onPageSelected(position: Int) {
+                    pictureCount.text = "${position+1}/${post.pictures?.size}"
+                }
+
+            })
         }
 
         private fun generateFragment(position: Int, image: ArrayList<String>): ArrayList<Fragment> {
