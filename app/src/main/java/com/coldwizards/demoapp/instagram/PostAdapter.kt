@@ -13,20 +13,28 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager.widget.ViewPager
 import com.coldwizards.demoapp.R
 import com.coldwizards.demoapp.databinding.PostVerticalItemBinding
+import com.coldwizards.demoapp.instagram.view.PhotoViewerFragment
+import com.coldwizards.demoapp.instagram.view.SquarePhotoViewFragment
 import com.coldwizards.demoapp.model.Comment
 import com.coldwizards.demoapp.model.Post
 import com.coldwizards.demoapp.model.User
 import com.coldwizards.demoapp.utils.loadImage
+import kotlinx.android.synthetic.main.activity_photo_viewer.view.*
+import me.relex.circleindicator.CircleIndicator
 
 /**
  * Created by jess on 19-6-13.
  */
-class PostAdapter : PagedListAdapter<Post, PostAdapter.PostViewHolder>(diffCallback) {
+class PostAdapter(val fragmentManager: FragmentManager) : PagedListAdapter<Post, PostAdapter.PostViewHolder>(diffCallback) {
 
     /**
      * 添加评论layout的点击的监听事件，返回当前item的position，offset是recyclerview需要滚动的offset
@@ -86,7 +94,8 @@ class PostAdapter : PagedListAdapter<Post, PostAdapter.PostViewHolder>(diffCallb
         val animView = itemView.findViewById<ImageView>(R.id.anim_like)
         val likeIcon = itemView.findViewById<CheckBox>(R.id.like)
         val likeCount = itemView.findViewById<TextView>(R.id.likeCount)
-        val imageView = itemView.findViewById<ImageView>(R.id.pictures)
+        val indicator = itemView.findViewById<CircleIndicator>(R.id.indicator)
+        val viewpager = itemView.findViewById<ViewPager>(R.id.pictures)
         val addComment = itemView.findViewById<TextView>(R.id.addComment)
         val postTime = itemView.findViewById<TextView>(R.id.postTime)
         val content = itemView.findViewById<TextView>(R.id.content)
@@ -105,32 +114,36 @@ class PostAdapter : PagedListAdapter<Post, PostAdapter.PostViewHolder>(diffCallb
             content.text = Html.fromHtml(
                 "<b>${post.author.username}</b>&nbsp; ${post.content}"
             )
+
+            setupViewPager(position, post)
+            indicator.setViewPager(viewpager)
+
             mUser?.let {user ->
                 if (post?.likeUsers?.contains(user.username)) likeIcon.isChecked = true else likeIcon.isChecked = false
             }
 
-            if (post.pictures?.isEmpty()!!) {
-                imageView.scaleType = ImageView.ScaleType.FIT_XY
-                imageView.loadImage(context, ContextCompat.getDrawable(context, R.drawable.image_holder)!!)
-            } else {
-                imageView.loadImage(context, post?.pictures?.get(0)!!)
-            }
+//            if (post.pictures?.isEmpty()!!) {
+//                imageView.scaleType = ImageView.ScaleType.FIT_XY
+//                imageView.loadImage(context, ContextCompat.getDrawable(context, R.drawable.image_holder)!!)
+//            } else {
+//                imageView.loadImage(context, post?.pictures?.get(0)!!)
+//            }
 
             /**
              * 点击ImageView时，判断likeIcon是否checked状态，如果不是，执行动画效果
              * 且[post]的likeCount加一
              */
-            imageView.setOnClickListener {
-                if (!likeIcon.isChecked) {
-                    val animation = AnimationUtils.loadAnimation(
-                        context,
-                        R.anim.like_animation
-                    )
-
-                    animView.startAnimation(animation)
-                    likeIcon.isChecked = !likeIcon.isChecked
-                }
-            }
+//            viewpager.setOnClickListener {
+//                if (!likeIcon.isChecked) {
+//                    val animation = AnimationUtils.loadAnimation(
+//                        context,
+//                        R.anim.like_animation
+//                    )
+//
+//                    animView.startAnimation(animation)
+//                    likeIcon.isChecked = !likeIcon.isChecked
+//                }
+//            }
 
             /**
              * 点击赞的监听事件
@@ -178,6 +191,33 @@ class PostAdapter : PagedListAdapter<Post, PostAdapter.PostViewHolder>(diffCallb
             textview.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
             textview.setTextColor(ContextCompat.getColor(context, R.color.black))
             return textview
+        }
+
+        private fun setupViewPager(position: Int, post: Post) {
+            val adapter = PhotoViewerAdapter(this@PostAdapter.fragmentManager,
+                generateFragment(position, ArrayList(post.pictures?.toList())))
+            viewpager.id = (System.currentTimeMillis() / (position+1)).toInt()
+            viewpager.adapter = adapter
+        }
+
+        private fun generateFragment(position: Int, image: ArrayList<String>): ArrayList<Fragment> {
+            val fragments = arrayListOf<SquarePhotoViewFragment>()
+            image.forEach {
+//                fragments.add(SquarePhotoViewFragment.newInstance(it))
+                fragments.add(SquarePhotoViewFragment(it){
+                    if (!likeIcon.isChecked) {
+                        val animation = AnimationUtils.loadAnimation(
+                            context,
+                            R.anim.like_animation
+                        )
+
+                        animView.startAnimation(animation)
+                        likeIcon.isChecked = !likeIcon.isChecked
+                    }
+                })
+            }
+
+            return fragments as ArrayList<Fragment>
         }
     }
 }

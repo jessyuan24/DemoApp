@@ -6,7 +6,6 @@ import android.animation.ObjectAnimator
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.provider.MediaStore
@@ -49,7 +48,7 @@ class PostListFragment : BaseFragment() {
     private var mUser: User? = null
     private var mImageFile = File("")
 
-    private val adapter = PostAdapter()
+    private var adapter: PostAdapter? = null
 
     private val permissions = arrayOf(
         Manifest.permission.WRITE_EXTERNAL_STORAGE,
@@ -61,7 +60,7 @@ class PostListFragment : BaseFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(com.coldwizards.demoapp.R.layout.fragment_post_list, container, false)
+        val view = inflater.inflate(R.layout.fragment_post_list, container, false)
 
         setHasOptionsMenu(true)
 
@@ -71,18 +70,20 @@ class PostListFragment : BaseFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        setRecyclerView()
-        setButtonListener()
-        setListener()
+        Handler().postDelayed({
+            setRecyclerView()
+            setButtonListener()
+            setListener()
 
-        if (!checkPermission()) {
-            requestPermission()
-        }
+            if (!checkPermission()) {
+                requestPermission()
+            }
 
-        (activity as InsActivity).userViewModel.mUserLiveData.observe(this, Observer {
-            mViewModel.mUser = it
-            adapter.mUser = it
-        })
+            (activity as InsActivity).userViewModel.mUserLiveData.observe(this, Observer {
+                mViewModel.mUser = it
+                adapter?.mUser = it
+            })
+        }, 300)
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -185,8 +186,8 @@ class PostListFragment : BaseFragment() {
         refresh_layout.setOnRefreshListener {
             mViewModel.mAllPosts.observe(this, Observer {
                 Handler().postDelayed({
-                    adapter.submitList(it)
-                    adapter.notifyDataSetChanged()
+                    adapter?.submitList(it)
+                    adapter?.notifyDataSetChanged()
                     refresh_layout.isRefreshing = false
 
                     showCenterToast("已刷新")
@@ -250,9 +251,9 @@ class PostListFragment : BaseFragment() {
 
                 hideKeyboard(activity!!)
 
-                val post = adapter.currentList?.get(mCurrentPosition)!!
+                val post = adapter?.currentList?.get(mCurrentPosition)!!
                 mViewModel.newComment(post, text)
-                adapter.notifyDataSetChanged()
+                adapter?.notifyDataSetChanged()
             }
         }
     }
@@ -281,9 +282,9 @@ class PostListFragment : BaseFragment() {
     }
 
     private fun setRecyclerView() {
-
+        adapter = PostAdapter(childFragmentManager!!)
         // 设置点击添加评论textview的事件
-        adapter.setCommentListener { position, offset ->
+        adapter?.setCommentListener { position, offset ->
             mCurrentPosition = position
             mOffset = offset
 
@@ -294,12 +295,17 @@ class PostListFragment : BaseFragment() {
         }
 
         // 更新post信息
-        adapter.likeListener { post, isChecked ->
+        adapter?.likeListener { post, isChecked ->
             mViewModel.update(post)
         }
 
         bookList.adapter = adapter
-        mViewModel.mAllPosts.observe(this, Observer(adapter::submitList))
+
+        val livedata = mViewModel.mAllPosts
+        livedata.observe(this, Observer {
+            adapter?.submitList(it)
+            livedata.removeObservers(this)
+        })
     }
 
     /**

@@ -32,7 +32,7 @@ abstract class InsDB : RoomDatabase() {
                     InsDB::class.java, "InsDatabase")
                     .addCallback(object : Callback() {
                         override fun onCreate(db: SupportSQLiteDatabase) {
-                            fillData(context)
+//                            fillData(context)
                         }
                     })
                     .build()
