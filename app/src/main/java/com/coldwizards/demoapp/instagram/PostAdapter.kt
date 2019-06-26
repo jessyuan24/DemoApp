@@ -6,6 +6,7 @@ import android.text.Html
 import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.widget.CheckBox
@@ -34,7 +35,8 @@ import me.relex.circleindicator.CircleIndicator
 /**
  * Created by jess on 19-6-13.
  */
-class PostAdapter(val fragmentManager: FragmentManager) : PagedListAdapter<Post, PostAdapter.PostViewHolder>(diffCallback) {
+class PostAdapter(val fragmentManager: FragmentManager) :
+    PagedListAdapter<Post, PostAdapter.PostViewHolder>(diffCallback) {
 
     /**
      * 添加评论layout的点击的监听事件，返回当前item的position，offset是recyclerview需要滚动的offset
@@ -116,9 +118,12 @@ class PostAdapter(val fragmentManager: FragmentManager) : PagedListAdapter<Post,
             )
 
             setupViewPager(position, post)
-            indicator.setViewPager(viewpager)
 
-            mUser?.let {user ->
+            indicator.setViewPager(viewpager)
+            indicator.visibility = if (post?.pictures?.size == 1) View.INVISIBLE else View.VISIBLE
+
+
+            mUser?.let { user ->
                 if (post?.likeUsers?.contains(user.username)) likeIcon.isChecked = true else likeIcon.isChecked = false
             }
 
@@ -194,26 +199,27 @@ class PostAdapter(val fragmentManager: FragmentManager) : PagedListAdapter<Post,
         }
 
         private fun setupViewPager(position: Int, post: Post) {
-            val adapter = PhotoViewerAdapter(this@PostAdapter.fragmentManager,
-                generateFragment(position, ArrayList(post.pictures?.toList())))
-            viewpager.id = (System.currentTimeMillis() / (position+1)).toInt()
+            val adapter = PhotoViewerAdapter(
+                this@PostAdapter.fragmentManager,
+                generateFragment(position, ArrayList(post.pictures?.toList()))
+            )
+            viewpager.id = (System.currentTimeMillis() / (position + 1)).toInt()
             viewpager.adapter = adapter
         }
 
         private fun generateFragment(position: Int, image: ArrayList<String>): ArrayList<Fragment> {
             val fragments = arrayListOf<SquarePhotoViewFragment>()
             image.forEach {
-//                fragments.add(SquarePhotoViewFragment.newInstance(it))
-                fragments.add(SquarePhotoViewFragment(it){
-                    if (!likeIcon.isChecked) {
-                        val animation = AnimationUtils.loadAnimation(
-                            context,
-                            R.anim.like_animation
-                        )
+                //                fragments.add(SquarePhotoViewFragment.newInstance(it))
+                fragments.add(SquarePhotoViewFragment(it) {
+                    val animation = AnimationUtils.loadAnimation(
+                        context,
+                        R.anim.like_animation
+                    )
 
-                        animView.startAnimation(animation)
-                        likeIcon.isChecked = !likeIcon.isChecked
-                    }
+                    animView.startAnimation(animation)
+
+                    likeIcon.isChecked = true
                 })
             }
 

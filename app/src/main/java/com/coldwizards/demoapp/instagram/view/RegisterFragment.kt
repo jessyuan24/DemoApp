@@ -1,9 +1,7 @@
 package com.coldwizards.demoapp.instagram.view
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
@@ -28,6 +26,11 @@ class RegisterFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        setHasOptionsMenu(true)
+        seToolbarTitle("Sign Up")
+        getToolbar().setDisplayHomeAsUpEnabled(true)
+        getToolbar().setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_24dp)
 
         register_btn.setOnClickListener {
             val username = user_name_et.text.toString()
@@ -58,6 +61,18 @@ class RegisterFragment : BaseFragment() {
                 4 -> showCenterToast("密码和确认密码不一致")
             }
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home) {
+            view!!.findNavController().popBackStack()
+        }
+
+        return super.onOptionsItemSelected(item)
     }
 
 }

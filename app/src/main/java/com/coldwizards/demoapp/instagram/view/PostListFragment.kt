@@ -21,6 +21,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.coldwizards.coollibrary.MyDialog
 import com.coldwizards.coollibrary.view.GalleryActivity
 import com.coldwizards.demoapp.R
 import com.coldwizards.demoapp.instagram.PostAdapter
@@ -70,6 +71,9 @@ class PostListFragment : BaseFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+        seToolbarTitle("Instagram")
+        getToolbar().setDisplayHomeAsUpEnabled(false)
+
         Handler().postDelayed({
             setRecyclerView()
             setButtonListener()
@@ -83,7 +87,7 @@ class PostListFragment : BaseFragment() {
                 mViewModel.mUser = it
                 adapter?.mUser = it
             })
-        }, 300)
+        }, 200)
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -114,7 +118,14 @@ class PostListFragment : BaseFragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.menu_login -> {
-                view!!.findNavController().navigate(R.id.action_postListFragment_to_loginFragment)
+                MyDialog(context!!)
+                    .setTitle("提示")
+                    .setMessage("是否退出登录")
+                    .setNegativeButton("取消", R.color.black){}
+                    .setPositiveButton("确定", R.color.red_900){
+                        view!!.findNavController().navigate(R.id.action_postListFragment_to_loginFragment)
+                    }
+                    .create().show()
             }
         }
 
@@ -282,7 +293,7 @@ class PostListFragment : BaseFragment() {
     }
 
     private fun setRecyclerView() {
-        adapter = PostAdapter(childFragmentManager!!)
+        adapter = PostAdapter(fragmentManager!!)
         // 设置点击添加评论textview的事件
         adapter?.setCommentListener { position, offset ->
             mCurrentPosition = position

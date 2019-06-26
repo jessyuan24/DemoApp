@@ -67,6 +67,9 @@ class NewPostFragment : BaseFragment() {
                     }, 1500)
                 }
             }
+            android.R.id.home -> {
+                view!!.findNavController().popBackStack()
+            }
         }
 
         return super.onOptionsItemSelected(item)
@@ -76,11 +79,11 @@ class NewPostFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val images = arguments?.getStringArrayList("data")
-
         images?.let {
             mAdapter.setData(it)
         }
 
+        setToolbar()
         setRecyclerView()
 
         (activity as InsActivity).userViewModel.mUserLiveData.observe(this, Observer {
@@ -104,6 +107,12 @@ class NewPostFragment : BaseFragment() {
                 mAdapter.setData(images)
             }
         }
+    }
+
+    private fun setToolbar() {
+        seToolbarTitle("New Post")
+        getToolbar().setDisplayHomeAsUpEnabled(true)
+        getToolbar().setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_24dp)
     }
 
     private fun setRecyclerView() {

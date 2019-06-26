@@ -34,6 +34,8 @@ class LoginFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        seToolbarTitle("Login")
+
         if ((arguments?.getString("username") ?: "").isNotEmpty()) {
             user_name_et.setText(arguments?.getString("username") ?: "")
         } else {

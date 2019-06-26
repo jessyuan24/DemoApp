@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewTreeObserver
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.appcompat.app.ActionBar
 import androidx.fragment.app.Fragment
 import com.coldwizards.coollibrary.ui.CenterToast
 import com.coldwizards.coollibrary.LoadingDialog
@@ -34,6 +35,14 @@ open class BaseFragment : Fragment() {
 
         showKeyboardListener = {}
         hiddenKeyboardListener = {}
+    }
+
+    fun getToolbar(): ActionBar {
+        return (activity as InsActivity).supportActionBar!!
+    }
+
+    fun seToolbarTitle(title: String) {
+        getToolbar().title = title
     }
 
     fun showToast(text: String) {
