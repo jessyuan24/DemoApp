@@ -4,6 +4,7 @@ import com.google.gson.Gson
 import org.junit.Test
 
 import org.junit.Assert.*
+import java.util.concurrent.Semaphore
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -18,8 +19,7 @@ class ExampleUnitTest {
 
     @Test
     fun derived_test() {
-        val b = BaseImpl(2)
-        Derived(b).print()
+
     }
 
     @Test
@@ -33,18 +33,9 @@ class ExampleUnitTest {
         val sets = hashSetOf("asdf", "11111")
         val json = Gson().toJson(sets)
     }
-}
-
-interface Base {
-    fun print()
-}
-
-class BaseImpl(val x: Int): Base {
-    override fun print() {
-        print(x * x)
-    }
-}
-
-class Derived(b: Base): Base by b {
 
 }
+
+
+
+

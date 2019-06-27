@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.coldwizards.coollibrary.view.GalleryActivity
+import com.coldwizards.demoapp.camerademo.CameraAppActivity
 import com.coldwizards.demoapp.instagram.view.InsActivity
 import com.coldwizards.demoapp.customview.TouchDemoActivity
 import com.coldwizards.demoapp.ndk.NdkJniUtils
@@ -52,5 +53,9 @@ class MainActivity : AppCompatActivity() {
 
     fun albums(view: View) {
         startActivity(Intent(this, GalleryActivity::class.java))
+    }
+
+    fun camera(view: View) {
+        startActivity(Intent(this, CameraAppActivity::class.java))
     }
 }

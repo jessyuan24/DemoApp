@@ -3,6 +3,7 @@ package com.coldwizards.demoapp.instagram.view
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.os.Environment
 import android.os.Handler
 import android.provider.MediaStore
 import android.view.*
@@ -15,9 +16,12 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.coldwizards.coollibrary.divider.GridPlacingDecoration
 import com.coldwizards.coollibrary.view.GalleryActivity
 import com.coldwizards.demoapp.R
+import com.coldwizards.demoapp.camerademo.CameraAppActivity
+import com.coldwizards.demoapp.camerademo.CameraFragment
 import com.coldwizards.demoapp.instagram.PostPictureAdapter
 import com.coldwizards.demoapp.instagram.viewmodel.NewPostViewModel
 import com.coldwizards.demoapp.utils.FileUtils
+import com.coldwizards.demoapp.utils.showCenterToast
 import kotlinx.android.synthetic.main.fragment_new_post.*
 import java.io.File
 
@@ -93,7 +97,9 @@ class NewPostFragment : BaseFragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == REQUEST_CAPTURE_IMAGE && resultCode == Activity.RESULT_OK) {
-            val images = arrayListOf<String>(mImageFile.absolutePath)
+            val images = arrayListOf<String>(
+                data?.getStringExtra(CameraFragment.FILE_PATH_PARAM)?:""
+            )
 
             mAdapter.addData(images[0])
         } else if (requestCode == REQUEST_PICK_IMAGE && resultCode == Activity.RESULT_OK) {
@@ -160,19 +166,25 @@ class NewPostFragment : BaseFragment() {
      * 打开相机拍照
      */
     private fun takePhoto() {
-        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-
-        mImageFile = FileUtils.createImageFile(context!!)
-
-        if (mImageFile != null) {
-            val uri = FileProvider.getUriForFile(
-                context!!,
-                "com.coldwizards.demoapp.provider",
-                mImageFile
-            )
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, uri)
-            startActivityForResult(intent, REQUEST_CAPTURE_IMAGE)
+//        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+//
+//        mImageFile = FileUtils.createImageFile(
+//            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).absolutePath +
+//                    "/" + "Instagram"
+//        )
+//
+//        if (mImageFile != null) {
+//            val uri = FileProvider.getUriForFile(
+//                context!!,
+//                "com.coldwizards.demoapp.provider",
+//                mImageFile
+//            )
+//            intent.putExtra(MediaStore.EXTRA_OUTPUT, uri)
+//            startActivityForResult(intent, REQUEST_CAPTURE_IMAGE)
+//        }
+        val intent = Intent(context!!, CameraAppActivity::class.java).apply {
+            putExtra(CameraFragment.REQUEST_TAKE_PHOTO_PARAM, true)
         }
-        
+        startActivityForResult(intent, REQUEST_CAPTURE_IMAGE)
     }
 }

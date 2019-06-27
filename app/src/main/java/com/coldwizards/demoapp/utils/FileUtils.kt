@@ -13,11 +13,11 @@ import java.util.*
 object FileUtils {
 
     @Throws(IOException::class)
-    fun createImageFile(context: Context): File {
+    fun createImageFile(dir: String): File {
         val timestamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
         val imageFileName = "IMG_$timestamp"
 
-        val dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+        val dir = File(dir)
         if (!dir.exists()) {
             dir.mkdirs()
         }

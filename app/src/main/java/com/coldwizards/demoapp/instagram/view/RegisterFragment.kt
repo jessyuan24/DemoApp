@@ -8,6 +8,7 @@ import androidx.navigation.findNavController
 import com.coldwizards.demoapp.R
 import com.coldwizards.demoapp.instagram.viewmodel.RegisterViewModel
 import com.coldwizards.demoapp.model.User
+import com.coldwizards.demoapp.utils.showCenterToast
 import kotlinx.android.synthetic.main.fragment_register.*
 
 /**

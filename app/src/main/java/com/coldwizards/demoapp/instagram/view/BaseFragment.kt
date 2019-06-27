@@ -45,13 +45,13 @@ open class BaseFragment : Fragment() {
         getToolbar().title = title
     }
 
-    fun showToast(text: String) {
-        Toast.makeText(context!!, text, Toast.LENGTH_SHORT).show()
-    }
+//    fun showToast(text: String) {
+//        Toast.makeText(context!!, text, Toast.LENGTH_SHORT).show()
+//    }
 
-    fun showCenterToast(text: String) {
-        CenterToast(context!!).show(text)
-    }
+//    fun showCenterToast(text: String) {
+//        CenterToast(context!!).show(text)
+//    }
 
     fun showLoading(text: String) {
         if (mLoadingDialog == null) {

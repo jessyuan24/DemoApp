@@ -12,11 +12,13 @@
             android:layout_height="wrap_content"
             style="@style/MyButton"
             android:onClick="touchDemo"
+            android:visibility="gone"
             android:text="Touch Demo"/>
 
     <Button android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/MyButton"
+            android:visibility="gone"
             android:onClick="dragDropDemo"
             android:text="DragDrop Demo"/>
 
@@ -24,12 +26,18 @@
             android:layout_height="wrap_content"
             style="@style/MyButton"
             android:onClick="booklibrary"
-            android:text="Instagram Demo"/>
+            android:text="Instagram App"/>
 
     <Button android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/MyButton"
-    android:onClick="albums"
-    android:text="Albums"/>
+            android:onClick="albums"
+            android:text="Albums"/>
+
+    <Button android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/MyButton"
+            android:onClick="camera"
+            android:text="Camera App"/>
 
 </LinearLayout>

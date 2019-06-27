@@ -1,5 +1,7 @@
 package com.coldwizards.demoapp;
 
+import com.coldwizards.demoapp.adapter.Captain;
+import com.coldwizards.demoapp.adapter.FishingBoatAdapter;
 import org.junit.Test;
 
 /**
@@ -8,7 +10,9 @@ import org.junit.Test;
 public class ExampleJavaUnitTest {
 
     @Test
-    public void ThreadTest() {
+    public void adapterTest() {
+        Captain captain = new Captain(new FishingBoatAdapter());
 
+        captain.row();
     }
 }
