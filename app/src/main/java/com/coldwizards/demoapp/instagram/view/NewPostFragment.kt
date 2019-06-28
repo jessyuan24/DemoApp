@@ -1,6 +1,7 @@
 package com.coldwizards.demoapp.instagram.view
 
 import android.app.Activity
+import android.app.ProgressDialog.show
 import android.content.Intent
 import android.os.Bundle
 import android.os.Environment
@@ -21,6 +22,7 @@ import com.coldwizards.demoapp.camerademo.CameraFragment
 import com.coldwizards.demoapp.instagram.PostPictureAdapter
 import com.coldwizards.demoapp.instagram.viewmodel.NewPostViewModel
 import com.coldwizards.demoapp.utils.FileUtils
+import com.coldwizards.demoapp.utils.launchActivity
 import com.coldwizards.demoapp.utils.showCenterToast
 import kotlinx.android.synthetic.main.fragment_new_post.*
 import java.io.File
@@ -96,29 +98,37 @@ class NewPostFragment : BaseFragment() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == REQUEST_CAPTURE_IMAGE && resultCode == Activity.RESULT_OK) {
-            val images = arrayListOf<String>(
-                data?.getStringExtra(CameraFragment.FILE_PATH_PARAM)?:""
-            )
+        if (resultCode == Activity.RESULT_OK) {
+            when(requestCode) {
+                REQUEST_CAPTURE_IMAGE -> {
+                    val images = arrayListOf<String>(
+                        data?.getStringExtra(CameraFragment.FILE_PATH_PARAM)?:""
+                    )
 
-            mAdapter.addData(images[0])
-        } else if (requestCode == REQUEST_PICK_IMAGE && resultCode == Activity.RESULT_OK) {
-            val images = data?.getStringArrayListExtra(GalleryActivity.SELECTED_IMAGE)
-            images?.let {
-                mAdapter.addData(images)
-            }
-        }  else if (requestCode == REQUEST_PHOTO_VIEWER && resultCode == Activity.RESULT_OK) {
-            val images = data?.getStringArrayListExtra(PhotoViewerActivity.IMAGES)
-            images?.let {
-                mAdapter.setData(images)
+                    mAdapter.addData(images[0])
+                }
+                REQUEST_PICK_IMAGE -> {
+                    val images = data?.getStringArrayListExtra(GalleryActivity.SELECTED_IMAGE)
+                    images?.let {
+                        mAdapter.addData(images)
+                    }
+                }
+                REQUEST_PHOTO_VIEWER -> {
+                    val images = data?.getStringArrayListExtra(PhotoViewerActivity.IMAGES)
+                    images?.let {
+                        mAdapter.setData(images)
+                    }
+                }
             }
         }
     }
 
     private fun setToolbar() {
-        seToolbarTitle("New Post")
-        getToolbar().setDisplayHomeAsUpEnabled(true)
-        getToolbar().setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_24dp)
+        getToolbar().apply {
+            title = "New Post"
+            setDisplayHomeAsUpEnabled(true)
+            setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_24dp)
+        }
     }
 
     private fun setRecyclerView() {
@@ -127,27 +137,29 @@ class NewPostFragment : BaseFragment() {
             if (b) {
                 showSelectDialog()
             } else {
-                val intent = Intent(context!!, PhotoViewerActivity::class.java)
-                intent.putExtra("images", arrayList)
-                intent.putExtra("position", position)
-                startActivityForResult(intent, REQUEST_PHOTO_VIEWER)
+                Intent(context!!, PhotoViewerActivity::class.java).apply {
+                    putExtra("images", arrayList)
+                    putExtra("position", position)
+                    startActivityForResult(this, REQUEST_PHOTO_VIEWER)
+                }
             }
         }
 
-        pictures.layoutManager = GridLayoutManager(context!!, 3)
-        pictures.adapter = mAdapter
-        pictures.addItemDecoration(
-            GridPlacingDecoration(
-                3, 20, false
+        pictures.apply {
+            layoutManager = GridLayoutManager(context!!, 3)
+            adapter = mAdapter
+            addItemDecoration(
+                GridPlacingDecoration(
+                    3, 20, false
+                )
             )
-        )
+        }
     }
 
     private fun showSelectDialog() {
-        val builder = AlertDialog.Builder(context!!)
-        builder
-            .setTitle("选择图片来源")
-            .setItems(arrayOf("拍照", "从相册中选择")) { listener, which ->
+        AlertDialog.Builder(context!!).apply {
+            setTitle("选择图片来源")
+            setItems(arrayOf("拍照", "从相册中选择")) { listener, which ->
                 when (which) {
                     0 -> takePhoto()
                     1 -> {
@@ -158,8 +170,9 @@ class NewPostFragment : BaseFragment() {
                     }
                 }
             }
-
-        builder.create().show()
+            create()
+            show()
+        }
     }
 
     /**
@@ -182,6 +195,7 @@ class NewPostFragment : BaseFragment() {
 //            intent.putExtra(MediaStore.EXTRA_OUTPUT, uri)
 //            startActivityForResult(intent, REQUEST_CAPTURE_IMAGE)
 //        }
+
         val intent = Intent(context!!, CameraAppActivity::class.java).apply {
             putExtra(CameraFragment.REQUEST_TAKE_PHOTO_PARAM, true)
         }

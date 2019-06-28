@@ -7,16 +7,14 @@ import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.os.Environment
 import android.os.Handler
-import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.*
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.content.FileProvider
+import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
@@ -30,7 +28,6 @@ import com.coldwizards.demoapp.camerademo.CameraFragment
 import com.coldwizards.demoapp.instagram.PostAdapter
 import com.coldwizards.demoapp.instagram.viewmodel.PostListViewModel
 import com.coldwizards.demoapp.model.User
-import com.coldwizards.demoapp.utils.FileUtils
 import com.coldwizards.demoapp.utils.showCenterToast
 import com.coldwizards.demoapp.utils.showToast
 import kotlinx.android.synthetic.main.fragment_post_list.*
@@ -76,8 +73,10 @@ class PostListFragment : BaseFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        seToolbarTitle("Instagram")
-        getToolbar().setDisplayHomeAsUpEnabled(false)
+        getToolbar().apply {
+            title = "Instagram"
+            setDisplayHomeAsUpEnabled(false)
+        }
 
         Handler().postDelayed({
             setRecyclerView()
@@ -104,15 +103,17 @@ class PostListFragment : BaseFragment() {
             val images = arrayListOf<String>(
                 data?.getStringExtra(CameraFragment.FILE_PATH_PARAM)?:""
             )
-            val bundle = Bundle()
-            bundle.putStringArrayList("data", images)
-            view!!.findNavController().navigate(R.id.action_postListFragment_to_newPostFragment, bundle)
+
+            bundleOf("data" to images).apply {
+                view!!.findNavController().navigate(R.id.action_postListFragment_to_newPostFragment, this)
+            }
+
         } else if (requestCode == REQUEST_PICK_IMAGE && resultCode == Activity.RESULT_OK) {
             val images = data?.getStringArrayListExtra(GalleryActivity.SELECTED_IMAGE)
-            images?.let {
-                val bundle = Bundle()
-                bundle.putStringArrayList("data", it)
-                view!!.findNavController().navigate(R.id.action_postListFragment_to_newPostFragment, bundle)
+            images ?: return
+            bundleOf("data" to images).apply {
+                view!!.findNavController()
+                    .navigate(R.id.action_postListFragment_to_newPostFragment, this)
             }
         }
     }
@@ -222,12 +223,12 @@ class PostListFragment : BaseFragment() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 val string = s.toString()
-                if (string.isEmpty()) {
-                    commit.isClickable = false
-                    commit.setTextColor(ContextCompat.getColor(context!!, R.color.grey_500))
-                } else {
-                    commit.isClickable = true
-                    commit.setTextColor(ContextCompat.getColor(context!!, R.color.black))
+                var clickable = string.isNotEmpty()
+                var color = if (string.isEmpty()) R.color.grey_500 else R.color.black
+
+                commit.apply {
+                    isClickable = clickable
+                    setTextColor(ContextCompat.getColor(context!!, color))
                 }
             }
 
