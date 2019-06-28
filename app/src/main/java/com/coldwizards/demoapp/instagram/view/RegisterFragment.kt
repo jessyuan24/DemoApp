@@ -29,9 +29,11 @@ class RegisterFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setHasOptionsMenu(true)
-        seToolbarTitle("Sign Up")
-        getToolbar().setDisplayHomeAsUpEnabled(true)
-        getToolbar().setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_24dp)
+        getToolbar().apply {
+            title = "Sign Up"
+            setDisplayHomeAsUpEnabled(true)
+            setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_24dp)
+        }
 
         register_btn.setOnClickListener {
             val username = user_name_et.text.toString()

@@ -41,7 +41,8 @@
         </activity>
 
         <activity
-                android:name=".camerademo.CameraAppActivity">
+                android:name=".camerademo.CameraAppActivity"
+                android:screenOrientation="portrait">
         </activity>
 
         <activity

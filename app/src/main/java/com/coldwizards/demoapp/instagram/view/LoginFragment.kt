@@ -54,33 +54,37 @@ class LoginFragment : BaseFragment() {
 
     private fun setButtonListener() {
         login_btn.setOnClickListener {
-            val username = user_name_et.text.toString()
-            val password = password_et.text.toString()
-            if (username.isEmpty()) {
-                showDialog("用户名不能为空")
-                return@setOnClickListener
+            val username = user_name_et.text.toString().apply {
+                if (isEmpty()) {
+
+                    showDialog("用户名不能为空")
+                    return@setOnClickListener
+                }
             }
-            if (password.isEmpty()) {
-                showDialog("密码不能为空")
-                return@setOnClickListener
+            val password = password_et.text.toString().apply {
+                if (isEmpty()) {
+                    showDialog("密码不能为空")
+                    return@setOnClickListener
+                }
             }
 
             viewmodel.login(this, username, password) { code, user ->
-                when(code) {
+                when (code) {
                     0 -> {
-                        val bundle = Bundle()
-                        bundle.putSerializable("user", user!!)
-                        view!!.findNavController().navigate(R.id.action_loginFragment_to_postListFragment, bundle)
+                        Bundle().also {
+                            it.putSerializable("user", user!!)
+                            view!!.findNavController().navigate(R.id.action_loginFragment_to_postListFragment, it)
+                        }
+
 
                         // 更新Activity的User,全局用户
-                        (activity as InsActivity).userViewModel.setUser(user)
+                        (activity as InsActivity).userViewModel.setUser(user!!)
                         hideKeyboard(activity!!)
                     }
                     1 -> showDialog("密码不正确")
                     2 -> showDialog("用户名不存在")
                 }
             }
-
         }
 
         register_btn.setOnClickListener {
@@ -89,11 +93,13 @@ class LoginFragment : BaseFragment() {
     }
 
     private fun showDialog(text: String) {
-        val dialog = MyDialog(context!!).setMessage(text)
+        MyDialog(context!!).setMessage(text)
             .setTitle("提示")
-            .setPositiveButton("确定", R.color.blue_300,{}).create()
-        dialog.window.attributes.windowAnimations =  R.style.ScaleEnterDialog
-        dialog.show()
+            .setPositiveButton("确定", R.color.blue_300){}.create()
+            .apply {
+                window.attributes.windowAnimations = R.style.ScaleEnterDialog
+                show()
+            }
     }
 
 }

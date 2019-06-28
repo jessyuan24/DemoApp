@@ -80,35 +80,47 @@ class GalleryActivity : AppCompatActivity() {
 
         }
 
+        supportActionBar?.apply {
+            title = item?.title
+            subtitle = "选择 0/${maxNumOfImage}"
+        }
+
         return super.onOptionsItemSelected(item)
     }
 
     private fun setToolbar() {
-        supportActionBar?.title = "Albums"
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_24dp)
-        supportActionBar?.subtitle = "选择 0/${maxNumOfImage}"
+        supportActionBar?.apply {
+            title = "Albums App"
+            setDisplayHomeAsUpEnabled(true)
+            setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_24dp)
+            subtitle = "选择 0/${maxNumOfImage}"
+        }
     }
 
     private fun setRecyclerView() {
-        mAdapter = GalleryAdapter()
-        mAdapter.setSelectable(true)
-        mAdapter.setUpdateUIListener { num, bool ->
-            supportActionBar?.subtitle = "已选择  ${num}/${maxNumOfImage}"
-            if (bool) {
-                Toast.makeText(this,
-                    "最多选择${maxNumOfImage}张图片",
-                    Toast.LENGTH_SHORT).show()
+        mAdapter = GalleryAdapter().apply {
+            setSelectable(true)
+            setUpdateUIListener { num, bool ->
+                supportActionBar?.subtitle = "已选择  ${num}/${maxNumOfImage}"
+                if (bool) {
+                    Toast.makeText(
+                        this@GalleryActivity,
+                        "最多选择${maxNumOfImage}张图片",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
         }
 
-        pictures.layoutManager = GridLayoutManager(this, 4)
-        pictures.adapter = mAdapter
-        pictures.addItemDecoration(
-            GridPlacingDecoration(
-                4, 10, false
+        pictures.apply {
+            layoutManager = GridLayoutManager(this@GalleryActivity, 4)
+            adapter = mAdapter
+            addItemDecoration(
+                GridPlacingDecoration(
+                    4, 10, false
+                )
             )
-        )
+        }
 
         viewModel.getAllAlbums(this).observe(this, Observer {
             mAdapter.setData(viewModel.getAllImageFromAlbums(it))

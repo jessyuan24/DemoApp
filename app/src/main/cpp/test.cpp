@@ -8,5 +8,5 @@
 JNIEXPORT jstring JNICALL Java_com_coldwizards_demoapp_ndk_NdkJniUtils_getString
   (JNIEnv *env, jobject)
 {
-    return env->NewStringUTF("Hello world!!!!!");
+    return env->NewStringUTF("Hi");
 }
